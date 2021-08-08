@@ -1,32 +1,78 @@
 package project.projectfive.panoramaviewerproject.ui.main
 
-import androidx.lifecycle.ViewModelProviders
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import project.projectfive.panoramaviewerproject.R
+import kotlin.math.PI
 
-class MainFragment : Fragment() {
+
+class MainFragment : Fragment(), SensorEventListener {
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var textX:TextView
+    private lateinit var textY:TextView
+    private lateinit var textZ:TextView
+    private lateinit var sensorManager:SensorManager
+    private lateinit var sensor: Sensor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        val inflatedView: View = inflater.inflate(R.layout.main_fragment, container, false)
+        this.sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        textX = inflatedView.findViewById(R.id.textX)
+        textY = inflatedView.findViewById(R.id.textY)
+        textZ = inflatedView.findViewById(R.id.textZ)
+        Log.d("ACCEL","inflated")
+        return inflatedView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //sensorManager.unregisterListener(this);
+    }
+    override fun onSensorChanged(event: SensorEvent?) {
+        val data:FloatArray = event?.values ?: FloatArray(3)
+        val x = data[0]/ PI*180
+        val y = data[1]/ PI*180
+        val z = data[2]/ PI*180
+        textX.setText("X : $x rad/s");
+        textY.setText("Y : $y rad/s");
+        textZ.setText("Z : $z rad/s");
+        //Log.d("ACCEL","data changed")
     }
 
 }
