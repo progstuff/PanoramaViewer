@@ -1,19 +1,24 @@
 package project.projectfive.panoramaviewerproject.ui.main
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import project.projectfive.panoramaviewerproject.R
+import java.util.*
 import kotlin.math.PI
 
 
@@ -42,6 +47,14 @@ class MainFragment : Fragment(), SensorEventListener {
         textY = inflatedView.findViewById(R.id.textY)
         textZ = inflatedView.findViewById(R.id.textZ)
         Log.d("ACCEL","inflated")
+
+        var layout:LinearLayout = inflatedView.findViewById(R.id.surface_layout)
+
+        context?.let{
+            layout.addView(MyGLSurfaceView(it))
+        }
+
+
         return inflatedView
     }
 
@@ -74,5 +87,6 @@ class MainFragment : Fragment(), SensorEventListener {
         textZ.setText("Z : $z rad/s");
         //Log.d("ACCEL","data changed")
     }
+
 
 }
