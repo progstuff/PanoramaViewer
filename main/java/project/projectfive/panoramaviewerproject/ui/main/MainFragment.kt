@@ -1,24 +1,23 @@
 package project.projectfive.panoramaviewerproject.ui.main
 
+import android.app.ActivityManager
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.content.Context.ACTIVITY_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import android.widget.Button
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import project.projectfive.panoramaviewerproject.R
-import java.util.*
 import kotlin.math.PI
 
 
@@ -51,12 +50,14 @@ class MainFragment : Fragment(), SensorEventListener {
         var layout:LinearLayout = inflatedView.findViewById(R.id.surface_layout)
 
         context?.let{
-            layout.addView(MyGLSurfaceView(it))
-        }
+            layout.addView(MyGlSurfaceView(context))
 
+        }
 
         return inflatedView
     }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
