@@ -21,7 +21,7 @@ class MyGLRenderer  //
     private var mWidth = 0
     private var mHeight = 0
     var mCube: Cube? = null
-    private var mAngle = 0f
+    private var mAngle = 0.0f
 
     //used the touch listener to move the cube up/down (y) and left/right (x)
     var y = 0f
@@ -72,7 +72,7 @@ class MyGLRenderer  //
         Matrix.translateM(mRotationMatrix, 0, x, y, 0f)
 
         //mangle is how fast, x,y,z which directions it rotates.
-        Matrix.rotateM(mRotationMatrix, 0, mAngle, 1.0f, 1.0f, 1.0f)
+        Matrix.rotateM(mRotationMatrix, 0, mAngle, 0.0f, 0.0f, 1.0f)
 
         // combine the model with the view matrix
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mRotationMatrix, 0)
@@ -82,7 +82,7 @@ class MyGLRenderer  //
         mCube?.draw(mMVPMatrix)
 
         //change the angle, so the cube will spin.
-        mAngle += .4f
+        mAngle += 179.9f
     }
 
     // /

@@ -46,7 +46,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Accelerometr Example"
+        android:text="Gyroscope Example"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +64,45 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textZ"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/btn_calibration"></LinearLayout>
+
+    <TextView
+        android:id="@+id/iX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="250dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/textX"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textX" />
+
+    <TextView
+        android:id="@+id/iY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/textY"
+        app:layout_constraintStart_toStartOf="@+id/iX"
+        app:layout_constraintTop_toTopOf="@+id/textY" />
+
+    <TextView
+        android:id="@+id/iZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/textZ"
+        app:layout_constraintStart_toStartOf="@+id/iX"
+        app:layout_constraintTop_toTopOf="@+id/textZ" />
+
+    <Button
+        android:id="@+id/btn_calibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Калибровка"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textZ" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
