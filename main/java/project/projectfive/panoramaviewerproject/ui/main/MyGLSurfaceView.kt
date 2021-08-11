@@ -42,7 +42,11 @@ class MyGlSurfaceView(context: Context?) : GLSurfaceView(context) {
         mPreviousY = y
         return true
     }
-
+    fun setAngles(xAng:Float, yAng:Float, zAng:Float){
+        myRender.xAngle = xAng
+        myRender.yAngle = yAng
+        myRender.zAngle = zAng
+    }
     companion object {
         //private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
         private const val TOUCH_SCALE_FACTOR = 0.015f

@@ -21,7 +21,9 @@ class MyGLRenderer  //
     private var mWidth = 0
     private var mHeight = 0
     var mCube: Cube? = null
-    private var mAngle = 0.0f
+    var xAngle = 0.0f
+    var yAngle = 0.0f
+    var zAngle = 0.0f
 
     //used the touch listener to move the cube up/down (y) and left/right (x)
     var y = 0f
@@ -54,6 +56,7 @@ class MyGLRenderer  //
     // /
     // Draw a triangle using the shader pair created in onSurfaceCreated()
     //
+
     override fun onDrawFrame(glUnused: GL10) {
 
         // Clear the color buffer  set above by glClearColor.
@@ -72,7 +75,9 @@ class MyGLRenderer  //
         Matrix.translateM(mRotationMatrix, 0, x, y, 0f)
 
         //mangle is how fast, x,y,z which directions it rotates.
-        Matrix.rotateM(mRotationMatrix, 0, mAngle, 0.0f, 0.0f, 1.0f)
+        Matrix.rotateM(mRotationMatrix, 0, xAngle, 1.0f, 0.0f, 0.0f)
+        Matrix.rotateM(mRotationMatrix, 0, yAngle, 0.0f, 1.0f, 0.0f)
+        Matrix.rotateM(mRotationMatrix, 0, zAngle, 0.0f, 0.0f, 1.0f)
 
         // combine the model with the view matrix
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mRotationMatrix, 0)
@@ -81,8 +86,6 @@ class MyGLRenderer  //
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0)
         mCube?.draw(mMVPMatrix)
 
-        //change the angle, so the cube will spin.
-        mAngle += 179.9f
     }
 
     // /
