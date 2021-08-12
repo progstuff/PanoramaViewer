@@ -4,6 +4,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow
@@ -12,6 +14,9 @@ import kotlin.math.sqrt
 class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
     private var gyroTimestamp1: Long = 0L
     private var gyroTimestamp2: Long = 0L
+    private var viewModelTimestamp1: Long = 0L
+    private var viewModelTimestamp2: Long = 0L
+    private var viewModelDt:Long = 16000000
     private var gyroDt:Long = 500000
     private var x:Float = 0.0f
     private var y:Float = 0.0f
@@ -29,11 +34,16 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
     private var measuresZ:ArrayList<Float> = ArrayList()
     private var currentCalibrationDt: Float = 0.0f
     private var calibrationDt:Float = 5.0f
+    lateinit var viewModel:MainViewModel
     var sensorManager: SensorManager
     var sensor: Sensor
     init{
         sensorManager = sensorMngr
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+    }
+
+    fun setViewModel(fragment:MainFragment){
+        viewModel = ViewModelProviders.of(fragment).get(MainViewModel::class.java)
     }
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
@@ -48,9 +58,7 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
         this.y = y.toFloat()
         this.z = z.toFloat()
 
-        //textX.text = "X : $x rad/s"
-        //textY.text = "Y : $y rad/s"
-        //textZ.text = "Z : $z rad/s"
+
         if(gyroTimestamp1 == 0L){
             gyroTimestamp1 = event?.timestamp ?: gyroTimestamp1
         }
@@ -75,10 +83,17 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
             saveCalibrationData(x.toFloat(), y.toFloat(), z.toFloat(), dt)
         }
 
-        //textiX.text = "X : $iX grad"
-        //textiY.text = "Y : $iY grad"
-        //textiZ.text = "Z : $iZ grad"
-        //glSurfaceView.setAngles(iX, iY, iZ)
+        if(viewModelTimestamp1 == 0L){
+            viewModelTimestamp1 = event?.timestamp ?: gyroTimestamp1
+        }
+        viewModelTimestamp2 = event?.timestamp ?: viewModelTimestamp2
+
+        if(viewModelTimestamp2 - viewModelTimestamp1 > viewModelDt){
+            viewModelTimestamp1 = event?.timestamp ?: viewModelTimestamp1
+            viewModel.setGyroData(x.toFloat(),y.toFloat(),z.toFloat(),iX,iY,iZ)
+        }
+
+        //
 
     }
 

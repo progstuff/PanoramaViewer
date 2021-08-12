@@ -17,7 +17,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.coroutines.Dispatchers
 import project.projectfive.panoramaviewerproject.R
 import kotlin.math.PI
 import kotlin.math.abs
@@ -41,7 +43,6 @@ class MainFragment : Fragment() {
     private lateinit var calibrateButton:Button
     private lateinit var glSurfaceView:MyGlSurfaceView
     private lateinit var gyroscopeManager: GyroscopeManager
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +70,20 @@ class MainFragment : Fragment() {
         context?.let{
             layout.addView(glSurfaceView)
         }
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel.getGyroData().observe(this, Observer<GyroData>{gyroData ->
+            textX.text = "X : ${gyroData.x} rad/s"
+            textY.text = "Y : ${gyroData.y} rad/s"
+            textZ.text = "Z : ${gyroData.z} rad/s"
 
+            textiX.text = "X : ${gyroData.iX} grad"
+            textiY.text = "Y : ${gyroData.iY} grad"
+            textiZ.text = "Z : ${gyroData.iZ} grad"
+
+            glSurfaceView.setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
+        })
+
+        gyroscopeManager.setViewModel(this)
         return inflatedView
     }
 
