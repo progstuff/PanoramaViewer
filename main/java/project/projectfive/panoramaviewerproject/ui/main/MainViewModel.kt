@@ -11,9 +11,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun setGyroData(x:Float, y:Float, z:Float, iX:Float, iY:Float, iZ:Float){
-        var gd = GyroData()
-        gd.updateData(x,y,z,iX,iY,iZ)
+    fun setGyroData(gd:GyroData){
         gyroscopeData.value = gd
     }
 

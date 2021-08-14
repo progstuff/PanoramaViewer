@@ -6,6 +6,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import javax.inject.Inject
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow
@@ -35,11 +36,17 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
     private var currentCalibrationDt: Float = 0.0f
     private var calibrationDt:Float = 5.0f
     lateinit var viewModel:MainViewModel
+    lateinit var gyroData:GyroData
+        @Inject set
+
     var sensorManager: SensorManager
     var sensor: Sensor
     init{
         sensorManager = sensorMngr
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        DaggerAppComponent.builder().build().inject(this)
+
+        //gyroData = GyroData()
     }
 
     fun setViewModel(fragment:MainFragment){
@@ -90,7 +97,8 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
 
         if(viewModelTimestamp2 - viewModelTimestamp1 > viewModelDt){
             viewModelTimestamp1 = event?.timestamp ?: viewModelTimestamp1
-            viewModel.setGyroData(x.toFloat(),y.toFloat(),z.toFloat(),iX,iY,iZ)
+            gyroData.updateData(x.toFloat(),y.toFloat(),z.toFloat(),iX,iY,iZ)
+            viewModel.setGyroData(gyroData)
         }
 
         //

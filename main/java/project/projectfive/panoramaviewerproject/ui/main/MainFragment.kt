@@ -81,6 +81,7 @@ class MainFragment : Fragment() {
             textiZ.text = "Z : ${gyroData.iZ} grad"
 
             glSurfaceView.setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
+            calibrateButton.isEnabled = !gyroscopeManager.isCalibrationState
         })
 
         gyroscopeManager.setViewModel(this)
