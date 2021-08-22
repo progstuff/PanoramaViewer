@@ -10,9 +10,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.view.PreviewView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import project.projectfive.panoramaviewerproject.CameraClasses.MyCameraManager
 import project.projectfive.panoramaviewerproject.GyroClasses.GyroData
 import project.projectfive.panoramaviewerproject.GyroClasses.GyroscopeManager
 import project.projectfive.panoramaviewerproject.OpenGLClasses.MyGlSurfaceView
@@ -34,9 +37,12 @@ class MainFragment : Fragment() {
     private lateinit var textiX:TextView
     private lateinit var textiY:TextView
     private lateinit var textiZ:TextView
+    private lateinit var cameraButton:Button
     private lateinit var calibrateButton:Button
     private lateinit var glSurfaceView: MyGlSurfaceView
     private lateinit var gyroscopeManager: GyroscopeManager
+    private lateinit var cameraManager:MyCameraManager
+    private lateinit var previewView:PreviewView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +91,10 @@ class MainFragment : Fragment() {
         })
 
         gyroscopeManager.setViewModel(this)
+
+        cameraButton = inflatedView.findViewById(R.id.camera_button)
+        previewView = inflatedView.findViewById(R.id.viewFinder)
+        cameraManager = MyCameraManager(activity as AppCompatActivity, cameraButton, previewView)
         return inflatedView
     }
 
@@ -103,7 +113,14 @@ class MainFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        gyroscopeManager.sensorManager.unregisterListener(gyroscopeManager);
+        gyroscopeManager.sensorManager.unregisterListener(gyroscopeManager)
+        cameraManager.takeOff()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray) {
+        cameraManager.tryToStartCamera(activity as AppCompatActivity, requestCode, previewView)
     }
 
 

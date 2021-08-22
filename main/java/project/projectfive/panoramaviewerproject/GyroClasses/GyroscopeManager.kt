@@ -5,7 +5,8 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModelProviders
-import project.projectfive.panoramaviewerproject.ui.main.DaggerAppComponent
+import project.projectfive.panoramaviewerproject.DI.DaggerAppComponent
+
 import project.projectfive.panoramaviewerproject.ui.MainFragment
 import project.projectfive.panoramaviewerproject.ViewModels.MainViewModel
 import javax.inject.Inject
