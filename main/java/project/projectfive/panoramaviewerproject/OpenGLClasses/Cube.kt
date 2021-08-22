@@ -1,13 +1,13 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.OpenGLClasses
 
 import android.opengl.GLES30
 import android.util.Log
-import project.projectfive.panoramaviewerproject.ui.main.myColor.blue
-import project.projectfive.panoramaviewerproject.ui.main.myColor.cyan
-import project.projectfive.panoramaviewerproject.ui.main.myColor.gray
-import project.projectfive.panoramaviewerproject.ui.main.myColor.green
-import project.projectfive.panoramaviewerproject.ui.main.myColor.red
-import project.projectfive.panoramaviewerproject.ui.main.myColor.yellow
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.blue
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.cyan
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.gray
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.green
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.red
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.yellow
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer

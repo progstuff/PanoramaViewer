@@ -1,11 +1,13 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.GyroClasses
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import project.projectfive.panoramaviewerproject.ui.main.DaggerAppComponent
+import project.projectfive.panoramaviewerproject.ui.MainFragment
+import project.projectfive.panoramaviewerproject.ViewModels.MainViewModel
 import javax.inject.Inject
 import kotlin.math.PI
 import kotlin.math.abs
@@ -35,8 +37,8 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
     private var measuresZ:ArrayList<Float> = ArrayList()
     private var currentCalibrationDt: Float = 0.0f
     private var calibrationDt:Float = 5.0f
-    lateinit var viewModel:MainViewModel
-    lateinit var gyroData:GyroData
+    lateinit var viewModel: MainViewModel
+    lateinit var gyroData: GyroData
         @Inject set
 
     var sensorManager: SensorManager
@@ -44,12 +46,13 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
     init{
         sensorManager = sensorMngr
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        DaggerAppComponent.builder().build().inject(this)
+        DaggerAppComponent.builder()
+            .build().inject(this)
 
         //gyroData = GyroData()
     }
 
-    fun setViewModel(fragment:MainFragment){
+    fun setViewModel(fragment: MainFragment){
         viewModel = ViewModelProviders.of(fragment).get(MainViewModel::class.java)
     }
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {

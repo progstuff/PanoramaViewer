@@ -1,4 +1,4 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.OpenGLClasses
 
 import android.content.Context
 import android.opengl.GLES30

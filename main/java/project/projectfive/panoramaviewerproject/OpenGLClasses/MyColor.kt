@@ -1,9 +1,9 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.OpenGLClasses
 
 import android.graphics.Color
 
 
-object myColor {
+object MyColor {
     fun red(): FloatArray {
         return floatArrayOf(
             Color.red(Color.RED) / 255f,

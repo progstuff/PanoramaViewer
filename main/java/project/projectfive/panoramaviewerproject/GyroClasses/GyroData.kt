@@ -1,11 +1,11 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.GyroClasses
 
 import dagger.Module
 import dagger.Provides
 
 
 @Module
-class GyroData {
+class GyroData constructor(){
     var x:Float = 0.0f
     var y:Float = 0.0f
     var z:Float = 0.0f
@@ -14,7 +14,7 @@ class GyroData {
     var iZ:Float = 0.0f
 
     @Provides
-    fun providesGyroData():GyroData{
+    fun providesGyroData(): GyroData {
         return GyroData()
     }
 

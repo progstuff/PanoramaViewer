@@ -1,11 +1,6 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.ui
 
-import android.app.ActivityManager
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
@@ -15,22 +10,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.coroutines.Dispatchers
+import project.projectfive.panoramaviewerproject.GyroClasses.GyroData
+import project.projectfive.panoramaviewerproject.GyroClasses.GyroscopeManager
+import project.projectfive.panoramaviewerproject.OpenGLClasses.MyGlSurfaceView
 import project.projectfive.panoramaviewerproject.R
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
+import project.projectfive.panoramaviewerproject.ViewModels.MainViewModel
 
 
 class MainFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() =
+            MainFragment()
     }
 
     private lateinit var viewModel: MainViewModel
@@ -41,7 +35,7 @@ class MainFragment : Fragment() {
     private lateinit var textiY:TextView
     private lateinit var textiZ:TextView
     private lateinit var calibrateButton:Button
-    private lateinit var glSurfaceView:MyGlSurfaceView
+    private lateinit var glSurfaceView: MyGlSurfaceView
     private lateinit var gyroscopeManager: GyroscopeManager
 
     override fun onCreateView(
@@ -49,7 +43,10 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val inflatedView: View = inflater.inflate(R.layout.main_fragment, container, false)
-        gyroscopeManager = GyroscopeManager(requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager)
+        gyroscopeManager =
+            GyroscopeManager(
+                requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            )
 
         textX = inflatedView.findViewById(R.id.textX)
         textY = inflatedView.findViewById(R.id.textY)
@@ -66,12 +63,15 @@ class MainFragment : Fragment() {
 
         var layout:LinearLayout = inflatedView.findViewById(R.id.surface_layout)
 
-        glSurfaceView = MyGlSurfaceView(context)
+        glSurfaceView =
+            MyGlSurfaceView(
+                context
+            )
         context?.let{
             layout.addView(glSurfaceView)
         }
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getGyroData().observe(this, Observer<GyroData>{gyroData ->
+        viewModel.getGyroData().observe(this, Observer<GyroData>{ gyroData ->
             textX.text = "X : ${gyroData.x} rad/s"
             textY.text = "Y : ${gyroData.y} rad/s"
             textZ.text = "Z : ${gyroData.z} rad/s"

@@ -1,8 +1,9 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.ViewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import project.projectfive.panoramaviewerproject.GyroClasses.GyroData
 
 class MainViewModel : ViewModel() {
     private val gyroscopeData: MutableLiveData<GyroData> by lazy {
@@ -11,7 +12,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun setGyroData(gd:GyroData){
+    fun setGyroData(gd: GyroData){
         gyroscopeData.value = gd
     }
 

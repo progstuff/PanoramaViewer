@@ -1,4 +1,4 @@
-package project.projectfive.panoramaviewerproject.ui.main
+package project.projectfive.panoramaviewerproject.OpenGLClasses
 
 import android.content.Context
 import android.opengl.GLSurfaceView
@@ -58,7 +58,10 @@ class MyGlSurfaceView(context: Context?) : GLSurfaceView(context) {
         super.setEGLConfigChooser(8, 8, 8, 8, 16, 0)
 
         // Set the Renderer for drawing on the GLSurfaceView
-        myRender = MyGLRenderer(context)
+        myRender =
+            MyGLRenderer(
+                context
+            )
         setRenderer(myRender)
 
         // Render the view only when there is a change in the drawing data

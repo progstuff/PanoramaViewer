@@ -1,9 +1,8 @@
-package project.projectfive.panoramaviewerproject
+package project.projectfive.panoramaviewerproject.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import project.projectfive.panoramaviewerproject.ui.main.DaggerAppComponent
-import project.projectfive.panoramaviewerproject.ui.main.MainFragment
+import project.projectfive.panoramaviewerproject.R
 
 class MainActivity : AppCompatActivity() {
 
