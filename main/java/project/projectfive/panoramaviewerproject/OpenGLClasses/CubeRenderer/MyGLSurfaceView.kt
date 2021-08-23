@@ -1,4 +1,4 @@
-package project.projectfive.panoramaviewerproject.OpenGLClasses
+package project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer
 
 import android.content.Context
 import android.opengl.GLSurfaceView

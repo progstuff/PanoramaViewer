@@ -1,13 +1,13 @@
-package project.projectfive.panoramaviewerproject.OpenGLClasses
+package project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer
 
 import android.opengl.GLES30
 import android.util.Log
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.blue
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.cyan
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.gray
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.green
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.red
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyColor.yellow
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyColor.blue
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyColor.cyan
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyColor.gray
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyColor.green
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyColor.red
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyColor.yellow
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -126,7 +126,9 @@ void main()
 
         // get handle to shape's transformation matrix
         mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgramObject, "uMVPMatrix")
-        MyGLRenderer.checkGlError("glGetUniformLocation")
+        MyGLRenderer.checkGlError(
+            "glGetUniformLocation"
+        )
 
         // get handle to fragment shader's vColor member
         mColorHandle = GLES30.glGetUniformLocation(mProgramObject, "vColor")
@@ -134,7 +136,9 @@ void main()
 
         // Apply the projection and view transformation
         GLES30.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0)
-        MyGLRenderer.checkGlError("glUniformMatrix4fv")
+        MyGLRenderer.checkGlError(
+            "glUniformMatrix4fv"
+        )
         val VERTEX_POS_INDX = 0
         mVertices.position(VERTEX_POS_INDX) //just in case.  We did it already though.
 
@@ -199,8 +203,16 @@ void main()
         val linked = IntArray(1)
 
         // Load the vertex/fragment shaders
-        vertexShader = MyGLRenderer.LoadShader(GLES30.GL_VERTEX_SHADER, vShaderStr)
-        fragmentShader = MyGLRenderer.LoadShader(GLES30.GL_FRAGMENT_SHADER, fShaderStr)
+        vertexShader =
+            MyGLRenderer.LoadShader(
+                GLES30.GL_VERTEX_SHADER,
+                vShaderStr
+            )
+        fragmentShader =
+            MyGLRenderer.LoadShader(
+                GLES30.GL_FRAGMENT_SHADER,
+                fShaderStr
+            )
 
         // Create the program object
         programObject = GLES30.glCreateProgram()

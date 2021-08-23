@@ -1,4 +1,4 @@
-package project.projectfive.panoramaviewerproject.OpenGLClasses
+package project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer
 
 import android.content.Context
 import android.opengl.GLES30
@@ -49,7 +49,8 @@ class MyGLRenderer  //
         //set the clear buffer color to a dark grey.
         GLES30.glClearColor(0.1f, .1f, 0.1f, 0.9f)
         //initialize the cube code for drawing.
-        mCube = Cube()
+        mCube =
+            Cube()
         //if we had other objects setup them up here as well.
     }
 

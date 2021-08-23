@@ -1,9 +1,11 @@
 package project.projectfive.panoramaviewerproject.ui
 
 import android.content.Context
+import android.graphics.Point
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +20,10 @@ import androidx.lifecycle.ViewModelProviders
 import project.projectfive.panoramaviewerproject.CameraClasses.MyCameraManager
 import project.projectfive.panoramaviewerproject.GyroClasses.GyroData
 import project.projectfive.panoramaviewerproject.GyroClasses.GyroscopeManager
-import project.projectfive.panoramaviewerproject.OpenGLClasses.MyGlSurfaceView
+import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyGlSurfaceView
 import project.projectfive.panoramaviewerproject.R
 import project.projectfive.panoramaviewerproject.ViewModels.MainViewModel
+import project.projectfive.panoramaviewerproject.OpenGLClasses.SphereRenderer.SphereSurfaceViewGL
 
 
 class MainFragment : Fragment() {
@@ -40,6 +43,8 @@ class MainFragment : Fragment() {
     private lateinit var cameraButton:Button
     private lateinit var calibrateButton:Button
     private lateinit var glSurfaceView: MyGlSurfaceView
+    private lateinit var glSphereView: SphereSurfaceViewGL
+
     private lateinit var gyroscopeManager: GyroscopeManager
     private lateinit var cameraManager:MyCameraManager
     private lateinit var previewView:PreviewView
@@ -54,12 +59,13 @@ class MainFragment : Fragment() {
                 requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
             )
 
-        textX = inflatedView.findViewById(R.id.textX)
-        textY = inflatedView.findViewById(R.id.textY)
-        textZ = inflatedView.findViewById(R.id.textZ)
-        textiX = inflatedView.findViewById(R.id.iX)
-        textiY = inflatedView.findViewById(R.id.iY)
-        textiZ = inflatedView.findViewById(R.id.iZ)
+        //textX = inflatedView.findViewById(R.id.textX)
+        //textY = inflatedView.findViewById(R.id.textY)
+        //textZ = inflatedView.findViewById(R.id.textZ)
+        //textiX = inflatedView.findViewById(R.id.iX)
+        //textiY = inflatedView.findViewById(R.id.iY)
+        //textiZ = inflatedView.findViewById(R.id.iZ)
+
         calibrateButton = inflatedView.findViewById(R.id.btn_calibration)
         calibrateButton.setOnClickListener {
             gyroscopeManager.isCalibrationState = true
@@ -69,24 +75,30 @@ class MainFragment : Fragment() {
 
         var layout:LinearLayout = inflatedView.findViewById(R.id.surface_layout)
 
-        glSurfaceView =
-            MyGlSurfaceView(
-                context
-            )
+        val display: Display? = activity?.getWindowManager()?.getDefaultDisplay()
+        val size = Point()
+        display?.getSize(size)
+        glSphereView = SphereSurfaceViewGL(context, size.x, size.y)
+
+        //glSurfaceView = MyGlSurfaceView(context)
         context?.let{
-            layout.addView(glSurfaceView)
+            //layout.addView(glSurfaceView)
+            layout.addView(glSphereView)
         }
+
+
+
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getGyroData().observe(this, Observer<GyroData>{ gyroData ->
-            textX.text = "X : ${gyroData.x} rad/s"
-            textY.text = "Y : ${gyroData.y} rad/s"
-            textZ.text = "Z : ${gyroData.z} rad/s"
+            //textX.text = "X : ${gyroData.x} rad/s"
+            //textY.text = "Y : ${gyroData.y} rad/s"
+            //textZ.text = "Z : ${gyroData.z} rad/s"
 
-            textiX.text = "X : ${gyroData.iX} grad"
-            textiY.text = "Y : ${gyroData.iY} grad"
-            textiZ.text = "Z : ${gyroData.iZ} grad"
+            //textiX.text = "X : ${gyroData.iX} grad"
+            //textiY.text = "Y : ${gyroData.iY} grad"
+            //textiZ.text = "Z : ${gyroData.iZ} grad"
 
-            glSurfaceView.setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
+            glSphereView.setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
             calibrateButton.isEnabled = !gyroscopeManager.isCalibrationState
         })
 
