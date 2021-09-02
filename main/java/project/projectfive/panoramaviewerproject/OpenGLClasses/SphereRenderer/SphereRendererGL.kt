@@ -9,7 +9,10 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import javax.microedition.khronos.opengles.GL10
-
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 
 class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
@@ -62,7 +65,8 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
         GLES20.glDepthFunc(GLES20.GL_LEQUAL)
         GLES20.glDepthMask(true)
-        Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, 2f, 0f, 0f, -5f, 0f, 1f, 0f)
+        //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, 2f, 0f, 0f, -5f, 0f, 1f, 0f)
+        //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, 4f, 1f, 0f, 0f, 0f, 1f, 0f)
         programHandle = program
         mMVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix")
         mPositionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position")
@@ -127,6 +131,7 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0)
 
 
+
 //        vertexBuffer.position(mPositionOffset);
 //
 //
@@ -168,10 +173,10 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
 
         // Draw the triangle facing straight on.
         Matrix.setIdentityM(mModelMatrix, 0)
-        //Matrix.rotateM(mModelMatrix, 0, angleInDegrees, -0.5f, 1.0f, 0.25f)
-        Matrix.rotateM(mModelMatrix, 0, xAngle, 1.0f, 0.0f, 0.0f)
-        Matrix.rotateM(mModelMatrix, 0, yAngle, 0.0f, 1.0f, 0.0f)
-        Matrix.rotateM(mModelMatrix, 0, zAngle, 0.0f, 0.0f, 1.0f)
+
+        //Matrix.rotateM(mModelMatrix, 0, xAngle, 1.0f, 0.0f, 0.0f)
+        //Matrix.rotateM(mModelMatrix, 0, yAngle, 0.0f, 1.0f, 0.0f)
+        //Matrix.rotateM(mModelMatrix, 0, zAngle, 0.0f, 0.0f, 1.0f)
 
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
@@ -186,12 +191,54 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
             0,
             6 * Math.pow(4.0, zoom.toDouble()).toInt()
         )
+        val ang = calculateEyeVector(xAngle, yAngle, zAngle)
+        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*5f, ang[1]*5f, ang[2]*5f, 0f, 0f, 0f, 0f, 1f, 0f)
+
         //        for (int i = 0; i < traps.size(); i++) {
 //            drawTriangle(traps.get(i).getTri1());
 //            drawTriangle(traps.get(i).getTri2());
 //        }
     }
 
+    fun rotateByX(ang_rad:Float, point:FloatArray):FloatArray{
+        var x = point[0];
+        var y = cos(ang_rad)*point[1] - sin(ang_rad)*point[2]
+        var z = sin(ang_rad)*point[1] + cos(ang_rad)*point[2]
+
+        return floatArrayOf(x,y,z)
+    }
+
+    fun rotateByY(ang_rad:Float, point:FloatArray):FloatArray{
+        var x = cos(ang_rad)*point[0] + sin(ang_rad)*point[2];
+        var y = point[1]
+        var z = -sin(ang_rad)*point[0] + cos(ang_rad)*point[2]
+
+        return floatArrayOf(x,y,z)
+    }
+
+    fun rotateByZ(ang_rad:Float, point:FloatArray):FloatArray{
+        var x = cos(ang_rad)*point[0] - sin(ang_rad)*point[1]
+        var y = sin(ang_rad)*point[0] + cos(ang_rad)*point[1]
+        var z = point[2]
+
+        return floatArrayOf(x,y,z)
+    }
+
+
+    fun calculateEyeVector(alfa:Float, beta:Float, gama:Float):FloatArray{
+        var a = alfa/180 * PI
+        var b = beta/180 * PI
+        var c = gama/180 * PI
+
+        var k = rotateByY(b.toFloat(), floatArrayOf(0f,0f,1f))
+
+        //k = rotateByX(b.toFloat(), k)
+        var s = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])
+        k[0] = k[0]/s
+        k[1] = k[1]/s
+        k[2] = k[2]/s
+        return k
+    }
     private fun getVertexData(row: Int, col: Int): FloatArray {
         val inc = Math.PI * 2 / Math.pow(2.0, zoom.toDouble())
         val theta = row * inc - Math.PI
