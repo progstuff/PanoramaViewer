@@ -147,6 +147,7 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
 //                mStrideBytes, vertexBuffer);
 //
 //        GLES20.glEnableVertexAttribArray(mColorHandle);
+
     }
 
     override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
@@ -191,37 +192,14 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
             0,
             6 * Math.pow(4.0, zoom.toDouble()).toInt()
         )
-        val ang = calculateEyeVector(xAngle, yAngle, zAngle)
+        val ang = calculateEyeVector(xAngle, yAngle)
+
         Matrix.setLookAtM(mViewMatrix, 0, ang[0]*5f, ang[1]*5f, ang[2]*5f, 0f, 0f, 0f, 0f, 1f, 0f)
 
         //        for (int i = 0; i < traps.size(); i++) {
 //            drawTriangle(traps.get(i).getTri1());
 //            drawTriangle(traps.get(i).getTri2());
 //        }
-    }
-
-    fun rotateByX(ang_rad:Float, point:FloatArray):FloatArray{
-        var x = point[0];
-        var y = cos(ang_rad)*point[1] - sin(ang_rad)*point[2]
-        var z = sin(ang_rad)*point[1] + cos(ang_rad)*point[2]
-
-        return floatArrayOf(x,y,z)
-    }
-
-    fun rotateByY(ang_rad:Float, point:FloatArray):FloatArray{
-        var x = cos(ang_rad)*point[0] + sin(ang_rad)*point[2];
-        var y = point[1]
-        var z = -sin(ang_rad)*point[0] + cos(ang_rad)*point[2]
-
-        return floatArrayOf(x,y,z)
-    }
-
-    fun rotateByZ(ang_rad:Float, point:FloatArray):FloatArray{
-        var x = cos(ang_rad)*point[0] - sin(ang_rad)*point[1]
-        var y = sin(ang_rad)*point[0] + cos(ang_rad)*point[1]
-        var z = point[2]
-
-        return floatArrayOf(x,y,z)
     }
 
     fun rotateByVector(ang_rad:Float, point:FloatArray, rotateVector:FloatArray):FloatArray{
@@ -246,16 +224,13 @@ class SphereRendererGL (private var zoom: Int) : GLSurfaceView.Renderer {
         return floatArrayOf(x,y,z)
     }
 
-    fun calculateEyeVector(alfa:Float, beta:Float, gama:Float):FloatArray{
+    fun calculateEyeVector(alfa:Float, beta:Float):FloatArray{
         var a = alfa/180 * PI
         var b = beta/180 * PI
-        var c = gama/180 * PI
 
-        //var k = rotateByY(b.toFloat(), floatArrayOf(0f,0f,1f))
         var k = rotateByVector(-a.toFloat(), floatArrayOf(1f,0f,0f), floatArrayOf(0f,0f,1f))
         k = rotateByVector(b.toFloat(), k, floatArrayOf(0f,1f,0f))
-        
-        //k = rotateByX(b.toFloat(), k)
+
         var s = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])
         k[0] = k[0]/s
         k[1] = k[1]/s

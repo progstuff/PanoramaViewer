@@ -21,6 +21,8 @@ import project.projectfive.panoramaviewerproject.CameraClasses.MyCameraManager
 import project.projectfive.panoramaviewerproject.GyroClasses.GyroData
 import project.projectfive.panoramaviewerproject.GyroClasses.GyroscopeManager
 import project.projectfive.panoramaviewerproject.OpenGLClasses.CubeRenderer.MyGlSurfaceView
+import project.projectfive.panoramaviewerproject.OpenGLClasses.OpenGLExamples.MyGLExampleSurfaceView
+import project.projectfive.panoramaviewerproject.OpenGLClasses.PointsRenderer.PointSurfaceViewGL
 import project.projectfive.panoramaviewerproject.R
 import project.projectfive.panoramaviewerproject.ViewModels.MainViewModel
 import project.projectfive.panoramaviewerproject.OpenGLClasses.SphereRenderer.SphereSurfaceViewGL
@@ -44,6 +46,8 @@ class MainFragment : Fragment() {
     private lateinit var calibrateButton:Button
     private lateinit var glSurfaceView: MyGlSurfaceView
     private lateinit var glSphereView: SphereSurfaceViewGL
+    //private lateinit var glPointView: PointSurfaceViewGL
+    private lateinit var glExampleView: MyGLExampleSurfaceView
 
     private lateinit var gyroscopeManager: GyroscopeManager
     private lateinit var cameraManager:MyCameraManager
@@ -78,12 +82,12 @@ class MainFragment : Fragment() {
         val display: Display? = activity?.getWindowManager()?.getDefaultDisplay()
         val size = Point()
         display?.getSize(size)
-        glSphereView = SphereSurfaceViewGL(context, size.x, size.y)
+        glExampleView = MyGLExampleSurfaceView(context)
 
         //glSurfaceView = MyGlSurfaceView(context)
         context?.let{
             //layout.addView(glSurfaceView)
-            layout.addView(glSphereView)
+            layout.addView(glExampleView )
         }
 
 
@@ -98,7 +102,7 @@ class MainFragment : Fragment() {
             //textiY.text = "Y : ${gyroData.iY} grad"
             //textiZ.text = "Z : ${gyroData.iZ} grad"
 
-            glSphereView.setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
+            //glExampleView .setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
             calibrateButton.isEnabled = !gyroscopeManager.isCalibrationState
         })
 
