@@ -30,7 +30,10 @@ class Square {
     private var mColorHandle = 0
     private var mMVPMatrixHandle = 0
     private val drawOrder =
-        shortArrayOf(0, 1, 2, 0, 2, 3) // order to draw vertices
+        shortArrayOf(0, 1, 2, 0, 2, 3,
+                     4, 5, 6, 4, 6, 7,
+                     8, 9, 10, 10, 11, 8
+                     ) // order to draw vertices
     private val vertexStride = COORDS_PER_VERTEX * 4 // 4 bytes per vertex
     var color = floatArrayOf(0.2f, 0.709803922f, 0.898039216f, 1.0f)
 
@@ -89,10 +92,24 @@ class Square {
         // number of coordinates per vertex in this array
         const val COORDS_PER_VERTEX = 3
         var squareCoords = floatArrayOf(
-            -0.5f, 0.5f, 0.0f,  // top left
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            0.5f, -0.5f, 0.0f,  // bottom right
-            0.5f, 0.5f, 0.0f
+            //left
+            -0.5f, 0.5f, 0.5f,  // top left
+            -0.5f, -0.5f, 0.5f,  // bottom left
+            0.5f, -0.5f, 0.5f,  // bottom right
+            0.5f, 0.5f, 0.5f,
+            //right
+            -0.5f, 0.5f, -0.5f,  // top left
+            -0.5f, -0.5f, -0.5f,  // bottom left
+            0.5f, -0.5f, -0.5f,  // bottom right
+            0.5f, 0.5f, -0.5f,
+
+            // down
+            -0.5f, 0.5f, 0.5f,
+            -0.5f, -0.5f, 0.5f,
+            -0.5f, 0.5f, -0.5f,
+            0.5f, -0.5f, 0.5f
+            // up
+
         ) // top right
     }
 

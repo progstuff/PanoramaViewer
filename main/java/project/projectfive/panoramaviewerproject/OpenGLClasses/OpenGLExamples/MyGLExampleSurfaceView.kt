@@ -40,6 +40,12 @@ class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
         return true
     }
 
+    fun setAngles(xAng:Float, yAng:Float, zAng:Float){
+        mRenderer.xAngle = xAng
+        mRenderer.yAngle = yAng
+        mRenderer.zAngle = zAng
+    }
+
     init {
 
         // Create an OpenGL ES 2.0 context.
@@ -52,6 +58,6 @@ class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
         setRenderer(mRenderer)
 
         // Render the view only when there is a change in the drawing data
-        renderMode = RENDERMODE_WHEN_DIRTY
+        //renderMode = RENDERMODE_WHEN_DIRTY
     }
 }

@@ -4,19 +4,28 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import android.util.Log
+
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 
 class MyGLExampleRenderer : GLSurfaceView.Renderer {
     lateinit private var mTriangle: Triangle
     lateinit private var mSquare: Square
-
+    lateinit private var mCube: Cube
+    lateinit var mCubes:ArrayList<Cube>
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private val mMVPMatrix = FloatArray(16)
     private val mProjectionMatrix = FloatArray(16)
     private val mViewMatrix = FloatArray(16)
     private val mRotationMatrix = FloatArray(16)
+    var xAngle = 0.0f
+    var yAngle = 0.0f
+    var zAngle = 0.0f
     /**
      * Returns the rotation angle of the triangle shape (mTriangle).
      *
@@ -33,6 +42,15 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
         mTriangle = Triangle()
         mSquare = Square()
+        mCubes = ArrayList()
+        var startZ:Float = -1f
+        var startY:Float = -1f
+        for (i in 1..20){
+            for (j in 1..20) {
+                mCubes.add(Cube(0.02f, 0f, startY + 0.1f * j.toFloat(), startZ + 0.1f * i.toFloat()))
+            }
+        }
+        //mCube = Cube(0.01f, 0f, 0f, 0f)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -42,14 +60,19 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        val ang = calculateEyeVector(xAngle, yAngle)
+        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*5f, ang[1]*5f, ang[2]*5f, 0f, 0f, 0f, 0f, 1f, 0f)
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
 
         // Draw square
-        mSquare.draw(mMVPMatrix)
-
+        //mSquare.draw(mMVPMatrix)
+        for(i in 1..mCubes.size){
+            mCubes.get(i-1).draw(mMVPMatrix)
+        }
+        //mCube.draw(mMVPMatrix)
         // Create a rotation for the triangle
 
         // Use the following code to generate constant rotation.
@@ -64,7 +87,45 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0)
 
         // Draw triangle
-        mTriangle.draw(scratch)
+        //mTriangle.draw(scratch)
+
+        //Log.d("ANGLES",xAngle.toString())
+    }
+
+    fun rotateByVector(ang_rad:Float, point:FloatArray, rotateVector:FloatArray):FloatArray{
+        var rx = rotateVector[0]
+        var ry = rotateVector[1]
+        var rz = rotateVector[2]
+        var a11 = cos(ang_rad) + (1- cos(ang_rad))*rx*rx
+        var a12 = (1- cos(ang_rad))*rx*ry - sin(ang_rad) *rz
+        var a13 = (1- cos(ang_rad))*rx*rz + sin(ang_rad) *ry
+
+        var a21 = (1- cos(ang_rad))*ry*rx + sin(ang_rad) *rz
+        var a22 = cos(ang_rad) + (1- cos(ang_rad))*ry*ry
+        var a23 = (1- cos(ang_rad))*ry*rz - sin(ang_rad) *rx
+
+        var a31 = (1- cos(ang_rad))*rz*rx - sin(ang_rad) *ry
+        var a32 = (1- cos(ang_rad))*rz*ry + sin(ang_rad) *rx
+        var a33 = cos(ang_rad) + (1- cos(ang_rad))*rz*rz
+
+        var x = point[0]*a11 + point[1]*a21 + point[2]*a31
+        var y = point[0]*a12 + point[1]*a22 + point[2]*a32
+        var z = point[0]*a13 + point[1]*a23 + point[2]*a33
+        return floatArrayOf(x,y,z)
+    }
+
+    fun calculateEyeVector(alfa:Float, beta:Float):FloatArray{
+        var a = alfa/180 * PI
+        var b = beta/180 * PI
+
+        var k = rotateByVector(-a.toFloat(), floatArrayOf(1f,0f,0f), floatArrayOf(0f,0f,1f))
+        k = rotateByVector(b.toFloat(), k, floatArrayOf(0f,1f,0f))
+
+        var s = sqrt(k[0]*k[0] + k[1]*k[1] + k[2]*k[2])
+        k[0] = k[0]/s
+        k[1] = k[1]/s
+        k[2] = k[2]/s
+        return k
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {

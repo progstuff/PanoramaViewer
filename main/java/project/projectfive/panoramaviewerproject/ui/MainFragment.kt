@@ -102,7 +102,7 @@ class MainFragment : Fragment() {
             //textiY.text = "Y : ${gyroData.iY} grad"
             //textiZ.text = "Z : ${gyroData.iZ} grad"
 
-            //glExampleView .setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
+            glExampleView.setAngles(gyroData.iX, gyroData.iY, gyroData.iZ)
             calibrateButton.isEnabled = !gyroscopeManager.isCalibrationState
         })
 
