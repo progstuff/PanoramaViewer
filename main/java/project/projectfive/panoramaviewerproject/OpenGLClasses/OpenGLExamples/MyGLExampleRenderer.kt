@@ -45,9 +45,21 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         mCubes = ArrayList()
         var startZ:Float = -1f
         var startY:Float = -1f
-        for (i in 1..20){
-            for (j in 1..20) {
-                mCubes.add(Cube(0.02f, 0f, startY + 0.1f * j.toFloat(), startZ + 0.1f * i.toFloat()))
+        var k = floatArrayOf(0f,0f,0f)
+        var dag:Float = 360f/25f
+        var da:Float = (-dag/180f*PI).toFloat()
+        for (i in 1..25){
+            for (j in 1..25) {
+                k = rotateByVector(da*j.toFloat(), floatArrayOf(3*1f,0f,0f), floatArrayOf(0f,1f,0f))
+                k = rotateByVector(90-da*i.toFloat(), k, floatArrayOf(1f,0f,0f))
+                mCubes.add(Cube(0.02f, k[2], k[1], k[0]))
+            }
+        }
+        for (i in 1..25){
+            for (j in 1..25) {
+                k = rotateByVector(90-da*j.toFloat(), floatArrayOf(0f,3*1f,0f), floatArrayOf(1f,0f,0f))
+                k = rotateByVector(da*i.toFloat(), k, floatArrayOf(0f,1f,0f))
+                mCubes.add(Cube(0.02f, k[2], k[1], k[0]))
             }
         }
         //mCube = Cube(0.01f, 0f, 0f, 0f)
@@ -62,7 +74,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         // Set the camera position (View matrix)
         //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         val ang = calculateEyeVector(xAngle, yAngle)
-        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*5f, ang[1]*5f, ang[2]*5f, 0f, 0f, 0f, 0f, 1f, 0f)
+        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
@@ -136,7 +148,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
 
         // this projection matrix is applied to object coordinates
         // in the onDrawFrame() method
-        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 2f, 14f)
     }
 
     companion object {
