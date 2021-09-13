@@ -16,8 +16,9 @@ import kotlin.math.sqrt
 class MyGLExampleRenderer : GLSurfaceView.Renderer {
     lateinit private var mTriangle: Triangle
     lateinit private var mSquare: Square
-    lateinit private var mCube: Cube
-    lateinit var mCubes:ArrayList<Cube>
+    lateinit var mCubesArcsPoints:ArrayList<ArrayList<Cube>>
+    lateinit var mLinesVerticalArcs:ArrayList<ArrayList<Line>>
+    lateinit var mLinesHorisontalArcs:ArrayList<ArrayList<Line>>
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private val mMVPMatrix = FloatArray(16)
     private val mProjectionMatrix = FloatArray(16)
@@ -42,26 +43,37 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
         mTriangle = Triangle()
         mSquare = Square()
-        mCubes = ArrayList()
-        var startZ:Float = -1f
-        var startY:Float = -1f
+        mCubesArcsPoints = ArrayList<ArrayList<Cube>>()
+        mLinesVerticalArcs = ArrayList<ArrayList<Line>>()
+        mLinesHorisontalArcs = ArrayList<ArrayList<Line>>()
         var k = floatArrayOf(0f,0f,0f)
-        var dag:Float = 360f/25f
+        var dag:Float = 360f/30f
         var da:Float = (-dag/180f*PI).toFloat()
-        for (i in 1..25){
-            for (j in 1..25) {
+        for (i in 1..30){
+            mCubesArcsPoints.add(ArrayList())
+            for (j in 1..30) {
                 k = rotateByVector(da*j.toFloat(), floatArrayOf(3*1f,0f,0f), floatArrayOf(0f,1f,0f))
-                k = rotateByVector(90-da*i.toFloat(), k, floatArrayOf(1f,0f,0f))
-                mCubes.add(Cube(0.02f, k[2], k[1], k[0]))
+                k = rotateByVector(da*i, k, floatArrayOf(0f,0f,1f))
+                mCubesArcsPoints[i-1].add(Cube(0.02f, k[2], k[1], k[0]))
             }
         }
-        for (i in 1..25){
-            for (j in 1..25) {
-                k = rotateByVector(90-da*j.toFloat(), floatArrayOf(0f,3*1f,0f), floatArrayOf(1f,0f,0f))
-                k = rotateByVector(da*i.toFloat(), k, floatArrayOf(0f,1f,0f))
-                mCubes.add(Cube(0.02f, k[2], k[1], k[0]))
+
+        for (i in 1..mCubesArcsPoints.size){
+            mLinesVerticalArcs.add(ArrayList())
+            for (j in 2..mCubesArcsPoints[i-1].size) {
+                mLinesVerticalArcs[i-1].add(Line(mCubesArcsPoints[i-1][j-2].center, mCubesArcsPoints[i-1][j-1].center))
             }
+            mLinesVerticalArcs[i-1].add(Line(mCubesArcsPoints[i-1][0].center, mCubesArcsPoints[i-1][mCubesArcsPoints[i-1].size-1].center))
         }
+
+        for (i in 1..mCubesArcsPoints[0].size){
+            mLinesHorisontalArcs.add(ArrayList())
+            for (j in 2..mCubesArcsPoints.size) {
+                mLinesHorisontalArcs[i-1].add(Line(mCubesArcsPoints[j-2][i-1].center, mCubesArcsPoints[j-1][i-1].center))
+            }
+            mLinesHorisontalArcs[i-1].add(Line(mCubesArcsPoints[0][i-1].center, mCubesArcsPoints[mCubesArcsPoints[0].size-1][i-1].center))
+        }
+
         //mCube = Cube(0.01f, 0f, 0f, 0f)
     }
 
@@ -74,34 +86,34 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         // Set the camera position (View matrix)
         //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         val ang = calculateEyeVector(xAngle, yAngle)
-        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
-
+        //Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
+        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*1f, ang[1]*1f, ang[2]*1f, 0f, 0f, 0f, 0f, 1f, 0f)
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
 
         // Draw square
         //mSquare.draw(mMVPMatrix)
-        for(i in 1..mCubes.size){
-            mCubes.get(i-1).draw(mMVPMatrix)
+        for (i in 1..(mCubesArcsPoints.size)){
+            for (j in 1..mCubesArcsPoints[i-1].size) {
+                mCubesArcsPoints[i-1][j-1].draw(mMVPMatrix)
+            }
         }
-        //mCube.draw(mMVPMatrix)
-        // Create a rotation for the triangle
+        for (i in 1..mLinesVerticalArcs.size){
+            for (j in 1..mLinesVerticalArcs[i-1].size) {
+                mLinesVerticalArcs[i-1][j-1].draw(mMVPMatrix)
+            }
+        }
+        for (i in 1..mLinesHorisontalArcs.size){
+            for (j in 1..mLinesHorisontalArcs[i-1].size) {
+                mLinesHorisontalArcs[i-1][j-1].draw(mMVPMatrix)
+            }
+        }
 
-        // Use the following code to generate constant rotation.
-        // Leave this code out when using TouchEvents.
-        // long time = SystemClock.uptimeMillis() % 4000L;
-        // float angle = 0.090f * ((int) time);
         Matrix.setRotateM(mRotationMatrix, 0, angle, 0f, 0f, 1.0f)
 
-        // Combine the rotation matrix with the projection and camera view
-        // Note that the mMVPMatrix factor *must be first* in order
-        // for the matrix multiplication product to be correct.
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0)
-
-        // Draw triangle
-        //mTriangle.draw(scratch)
-
-        //Log.d("ANGLES",xAngle.toString())
+        //val l = Line(floatArrayOf(0f,0f,0f), floatArrayOf(0f,0f,1f))
+        //l.draw(mMVPMatrix)
     }
 
     fun rotateByVector(ang_rad:Float, point:FloatArray, rotateVector:FloatArray):FloatArray{

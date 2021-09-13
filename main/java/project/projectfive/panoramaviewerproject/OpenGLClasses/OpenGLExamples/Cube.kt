@@ -101,6 +101,8 @@ class Cube(size:Float, xShift:Float, yShift:Float, zShift:Float) {
     var colorgreen = green()
     var coloryellow = yellow()
 
+
+
     //vertex shader code
     var vShaderStr = """#version 300 es 			  
 uniform mat4 uMVPMatrix;     
@@ -187,6 +189,8 @@ void main()
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, startPos, verticesPerface)
         //last face, so no need to increment.
     }
+
+    val center = floatArrayOf(xShift, yShift, zShift)
 
     //finally some methods
     //constructor
