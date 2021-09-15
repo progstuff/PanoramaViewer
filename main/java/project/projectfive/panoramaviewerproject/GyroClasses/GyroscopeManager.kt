@@ -37,7 +37,7 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
     private var sigmaZ:Float = 0.0f
     private var measuresZ:ArrayList<Float> = ArrayList()
     private var currentCalibrationDt: Float = 0.0f
-    private var calibrationDt:Float = 5.0f
+    private var calibrationDt:Float = 0.01f
     lateinit var viewModel: MainViewModel
     lateinit var gyroData: GyroData
         @Inject set
@@ -120,12 +120,12 @@ class GyroscopeManager(sensorMngr: SensorManager): SensorEventListener {
             if(currentCalibrationDt >= calibrationDt){
                 calibrationDone = true
                 ///
-                val meanX = measuresX.average().toFloat()
-                val meanY = measuresY.average().toFloat()
-                val meanZ = measuresZ.average().toFloat()
-                sigmaX = calculateSD(measuresX, meanX)
-                sigmaY = calculateSD(measuresY, meanY)
-                sigmaZ = calculateSD(measuresZ, meanZ)
+                //val meanX = measuresX.average().toFloat()
+                //val meanY = measuresY.average().toFloat()
+                //val meanZ = measuresZ.average().toFloat()
+                //sigmaX = calculateSD(measuresX, meanX)
+                //sigmaY = calculateSD(measuresY, meanY)
+                //sigmaZ = calculateSD(measuresZ, meanZ)
                 currentCalibrationDt = 0.0f
                 measuresX.clear()
                 measuresY.clear()

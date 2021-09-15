@@ -52,8 +52,8 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         for (i in 1..30){
             mCubesArcsPoints.add(ArrayList())
             for (j in 1..30) {
-                k = rotateByVector(da*j.toFloat(), floatArrayOf(3*1f,0f,0f), floatArrayOf(0f,1f,0f))
-                k = rotateByVector(da*i, k, floatArrayOf(0f,0f,1f))
+                k = rotateByVector(da*j.toFloat(), floatArrayOf(0f,1*3f,0f), floatArrayOf(1f,0f,0f))
+                k = rotateByVector(da*i, k, floatArrayOf(0f,1f,0f))
                 mCubesArcsPoints[i-1].add(Cube(0.02f, k[2], k[1], k[0]))
             }
         }
@@ -87,7 +87,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         val ang = calculateEyeVector(xAngle, yAngle)
         //Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
-        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*1f, ang[1]*1f, ang[2]*1f, 0f, 0f, 0f, 0f, 1f, 0f)
+        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
 
@@ -141,7 +141,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
     fun calculateEyeVector(alfa:Float, beta:Float):FloatArray{
         var a = alfa/180 * PI
         var b = beta/180 * PI
-
+        //Log.d("ANGLE:",alfa.toString())
         var k = rotateByVector(-a.toFloat(), floatArrayOf(1f,0f,0f), floatArrayOf(0f,0f,1f))
         k = rotateByVector(b.toFloat(), k, floatArrayOf(0f,1f,0f))
 
