@@ -36,17 +36,9 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var textX:TextView
-    private lateinit var textY:TextView
-    private lateinit var textZ:TextView
-    private lateinit var textiX:TextView
-    private lateinit var textiY:TextView
-    private lateinit var textiZ:TextView
     private lateinit var cameraButton:Button
     private lateinit var calibrateButton:Button
-    private lateinit var glSurfaceView: MyGlSurfaceView
-    private lateinit var glSphereView: SphereSurfaceViewGL
-    //private lateinit var glPointView: PointSurfaceViewGL
+    private lateinit var perspectiveButton:Button
     private lateinit var glExampleView: MyGLExampleSurfaceView
 
     private lateinit var gyroscopeManager: GyroscopeManager
@@ -75,6 +67,10 @@ class MainFragment : Fragment() {
             gyroscopeManager.isCalibrationState = true
             calibrateButton.isEnabled = false
         }
+        perspectiveButton = inflatedView.findViewById(R.id.perspective_change)
+        perspectiveButton.setOnClickListener {
+            glExampleView.changePerspective()
+        }
         Log.d("ACCEL","inflated")
 
         var layout:LinearLayout = inflatedView.findViewById(R.id.surface_layout)
@@ -83,10 +79,7 @@ class MainFragment : Fragment() {
         val size = Point()
         display?.getSize(size)
         glExampleView = MyGLExampleSurfaceView(context)
-
-        //glSurfaceView = MyGlSurfaceView(context)
         context?.let{
-            //layout.addView(glSurfaceView)
             layout.addView(glExampleView )
         }
 

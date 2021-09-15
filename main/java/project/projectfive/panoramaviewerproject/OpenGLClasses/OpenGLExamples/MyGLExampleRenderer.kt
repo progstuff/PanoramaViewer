@@ -24,6 +24,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
     private val mProjectionMatrix = FloatArray(16)
     private val mViewMatrix = FloatArray(16)
     private val mRotationMatrix = FloatArray(16)
+    var zm = 10f
     var xAngle = 0.0f
     var yAngle = 0.0f
     var zAngle = 0.0f
@@ -87,7 +88,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
         //Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         val ang = calculateEyeVector(xAngle, yAngle)
         //Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
-        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*10f, ang[1]*10f, ang[2]*10f, 0f, 0f, 0f, 0f, 1f, 0f)
+        Matrix.setLookAtM(mViewMatrix, 0, ang[0]*zm, ang[1]*zm, ang[2]*zm, 0f, 0f, 0f, 0f, 1f, 0f)
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
 

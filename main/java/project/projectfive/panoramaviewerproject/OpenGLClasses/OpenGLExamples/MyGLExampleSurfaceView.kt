@@ -10,6 +10,7 @@ class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
     private val TOUCH_SCALE_FACTOR = 180.0f / 320
     private var mPreviousX = 0f
     private var mPreviousY = 0f
+    private var isOutView = true
     override fun onTouchEvent(e: MotionEvent): Boolean {
         // MotionEvent reports input details from the touch screen
         // and other input controls. In this case, you are only
@@ -44,6 +45,15 @@ class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
         mRenderer.xAngle = xAng
         mRenderer.yAngle = yAng
         mRenderer.zAngle = zAng
+    }
+
+    fun changePerspective(){
+        if(isOutView){
+            mRenderer.zm = 10f
+        } else {
+            mRenderer.zm = 1f
+        }
+        isOutView = !isOutView
     }
 
     init {
