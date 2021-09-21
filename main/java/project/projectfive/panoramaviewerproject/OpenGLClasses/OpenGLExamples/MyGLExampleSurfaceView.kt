@@ -7,6 +7,7 @@ import android.view.MotionEvent
 
 class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
     private val mRenderer: MyGLExampleRenderer
+    private var mRenderer2: TextureRenderer? = null
     private val TOUCH_SCALE_FACTOR = 180.0f / 320
     private var mPreviousX = 0f
     private var mPreviousY = 0f
@@ -65,7 +66,12 @@ class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer =
             MyGLExampleRenderer()
-        setRenderer(mRenderer)
+        if(context != null){
+            mRenderer2 = TextureRenderer(context)
+            setRenderer(mRenderer2)
+        }
+
+
 
         // Render the view only when there is a change in the drawing data
         //renderMode = RENDERMODE_WHEN_DIRTY

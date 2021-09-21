@@ -41,7 +41,6 @@
         android:id="@+id/viewFinder"
         android:layout_width="169dp"
         android:layout_height="180dp"
-        app:layout_constraintBottom_toTopOf="@+id/camera_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
