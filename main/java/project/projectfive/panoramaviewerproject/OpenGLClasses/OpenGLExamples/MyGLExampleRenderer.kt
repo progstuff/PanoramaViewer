@@ -1,5 +1,6 @@
 package project.projectfive.panoramaviewerproject.OpenGLClasses.OpenGLExamples
 
+import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
@@ -13,12 +14,14 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 
-class MyGLExampleRenderer : GLSurfaceView.Renderer {
+class MyGLExampleRenderer (cntx: Context?) : GLSurfaceView.Renderer {
+    lateinit var context:Context
     lateinit private var mTriangle: Triangle
     lateinit private var mSquare: Square
     lateinit var mCubesArcsPoints:ArrayList<ArrayList<Cube>>
     lateinit var mLinesVerticalArcs:ArrayList<ArrayList<Line>>
     lateinit var mLinesHorisontalArcs:ArrayList<ArrayList<Line>>
+    lateinit var textureObject:TextureObject
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private val mMVPMatrix = FloatArray(16)
     private val mProjectionMatrix = FloatArray(16)
@@ -37,6 +40,11 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
      * Sets the rotation angle of the triangle shape (mTriangle).
      */
     var angle = 0f
+
+    init {
+        if(cntx != null)
+            context = cntx
+    }
 
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
 
@@ -74,7 +82,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
             }
             mLinesHorisontalArcs[i-1].add(Line(mCubesArcsPoints[0][i-1].center, mCubesArcsPoints[mCubesArcsPoints[0].size-1][i-1].center))
         }
-
+        textureObject = TextureObject(context)
         //mCube = Cube(0.01f, 0f, 0f, 0f)
     }
 
@@ -109,6 +117,7 @@ class MyGLExampleRenderer : GLSurfaceView.Renderer {
                 mLinesHorisontalArcs[i-1][j-1].draw(mMVPMatrix)
             }
         }
+        //textureObject.draw(mMVPMatrix)
 
         Matrix.setRotateM(mRotationMatrix, 0, angle, 0f, 0f, 1.0f)
 

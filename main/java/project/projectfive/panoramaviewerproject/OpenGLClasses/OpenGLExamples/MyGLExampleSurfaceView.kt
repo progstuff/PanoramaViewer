@@ -7,7 +7,8 @@ import android.view.MotionEvent
 
 class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
     private val mRenderer: MyGLExampleRenderer
-    private var mRenderer2: TextureRenderer? = null
+    private val mRenderer2: GLRendererLessonExample
+    //private var mRenderer2: TextureRenderer? = null
     private val TOUCH_SCALE_FACTOR = 180.0f / 320
     private var mPreviousX = 0f
     private var mPreviousY = 0f
@@ -65,11 +66,14 @@ class MyGLExampleSurfaceView(context: Context?) : GLSurfaceView(context) {
         super.setEGLConfigChooser(8, 8, 8, 8, 16, 0)
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer =
-            MyGLExampleRenderer()
-        if(context != null){
+            MyGLExampleRenderer(context)
+        mRenderer2 = GLRendererLessonExample(context)
+
+        setRenderer(mRenderer2)
+        /*if(context != null){
             mRenderer2 = TextureRenderer(context)
             setRenderer(mRenderer2)
-        }
+        }*/
 
 
 
